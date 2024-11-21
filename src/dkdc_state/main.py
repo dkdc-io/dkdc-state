@@ -29,5 +29,24 @@ class State:
         for table_name in wcon.list_tables():
             rcon.read_sqlite(self.dbpath, table_name=table_name)
 
+        # note all table names (for use in _clear() in particular)
+        self.all_table_names = []
+
         # return connections
         return wcon, rcon
+
+    def _clear(self, table_names: str | list[str] = None):
+        # if table_names is None, clear all tables
+        table_names = self.all_table_names if table_names is None else table_names
+
+        # if table_names is a string, convert to a list
+        if isinstance(table_names, str):
+            table_names = [table_names]
+
+        # drop views and tables
+        for table_name in table_names:
+            self.rcon.drop_view(table_name)
+            self.wcon.drop_table(table_name)
+
+        # reset connections (recreate tables)
+        self.wcon, self.rcon = self._cons()
