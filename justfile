@@ -29,7 +29,7 @@ upgrade:
     @uv lock --upgrade
 
 build-python:
-    @rm -r dist
+    @rm -r dist || true
     @uv build
 
 format:
