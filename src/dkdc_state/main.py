@@ -2,7 +2,6 @@
 State base class.
 """
 
-import os
 import ibis
 import ibis.expr.datatypes as dt  # noqa: F401
 
